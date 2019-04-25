@@ -54,23 +54,20 @@ connection.query("SELECT * from products WHERE ?", {item_id: id}, function(err,r
 }
 
 
-const checkInventory = function(qty, id){
-    connection.query(`SELECT stock_quantity, price from products WHERE item_id = ${id}`, function(err,res){
-        if(res[0].stock_quantity >= qty){
-            // update the db
-            connection.query(`UPDATE products SET stock_quantity = ${res[0].stock_quantity - qty} WHERE item_id = ${id}`);
-            console.log(`Your price is $${qty * res[0].price).toFixed(2)}`)
-        }else{
-            console.log('There is not enough inventory for #${id} for you')
-        }
-        console.log(result)
-        connection.end();
-
-        }
-
-        
-
-}
-
+const checkInventory = function(qty,id) {
+    connection.query(`Select stock_quantity,price from products WHERE item_id = ${id}`,function(err, res) {
+      let result;
+      if(res[0].stock_quantity >= qty){
+           //update the db and show the cost
+           connection.query(`UPDATE products SET stock_quantity = ${res[0].stock_quantity - qty} WHERE item_id = ${id}`);
+           result = `Your price is $${(qty * res[0].price).toFixed(2)}`;
+       }else{
+           result = `There's not enough of product #${id} for you! `;
+       }
+      console.log(result)
+      connection.end();
+      }
+    );
+  };
 
 
